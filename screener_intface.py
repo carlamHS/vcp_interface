@@ -114,7 +114,7 @@ earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticke
 # download dataframe
 start = date - timedelta(days = p)
 
-history_data = pdr.get_data_yahoo(ticker, start=start, end=date)
+history_data = pdr.get_data_yahoo(ticker, start=start, end=date+timedelta(days = 1))
 
 prices = history_data['Close']
 volumes = history_data['Volume']
