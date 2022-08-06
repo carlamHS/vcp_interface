@@ -7,6 +7,7 @@
 import pandas as pd
 import streamlit as st
 import datetime as dt
+import plotly
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
@@ -15,6 +16,7 @@ import os
 from pandas_datareader import data as pdr
 import yfinance as yf
 from datetime import date, time,timedelta, datetime
+
 yf.pdr_override()
 
 total_info_name = "/Download/total_info.csv"    # For logging the stock statistic daily  收集每日.pdf數據作縱貫分析
