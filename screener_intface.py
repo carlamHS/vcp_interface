@@ -3,7 +3,6 @@
 
 # In[1]:
 
-
 import pandas as pd
 import streamlit as st
 import datetime as dt
@@ -16,50 +15,45 @@ import os
 from pandas_datareader import data as pdr
 import yfinance as yf
 from datetime import date, time,timedelta, datetime
+import gspread
+import json
+
+
 
 yf.pdr_override()
 
-total_info_name = "/Download/total_info.csv"    # For logging the stock statistic daily  收集每日.pdf數據作縱貫分析
-if os.path.exists(total_info_name):
-    df = pd.read_csv(total_info_name)
+def get_credentials():
+    from oauth2client.service_account import ServiceAccountCredentials
+    credentials = {
+  "type": "service_account",
+  "project_id": "web-application-358408",
+  "private_key_id": "ca0e336e01e1cd5b194da82fc4205a71c61d010f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtnR14yAkmUBxT\nQE6Ects3apMiZjuCbbtecrt1cw40a2Zk+3EV23MHMx6xPO4LjiWwBA7gAB7bcwvr\n5xOkHQpOiCS3dBZEGOkI09uVhqilZzZ5svLQ3Lvtt22wPN7mWKQ5dN7Zg04nkVIP\nOn0nXwUkL4H3QYUjQX8AUlr1N31sLAZOjwq8hSdpw2+9+k3mQ6LnmBz3JqhD2EW6\n7X/U3udr7/Y31PAqQPDbTUkrNqC9dKB3WfohmSv+U/V6pOXw8m1nOF7szUOSaiR1\nnnMdRMa25PvAJ8fO1FwPbQ1vxDGdAdO7QOagkDT293f/ODY7H7BJscGcCeEc0zCu\nrxwXUkdLAgMBAAECggEAOgf0W/TxKf9JGIK8PAVwRPu4ppzpc1Veddl/02hb7SWh\nGkv5psatklCCB9hH8VDYRBd3KWSg69VuvLGGnSqf0VQsga2p66Uv76VxFm/mWzM+\nwDsScsH1hyXy4h/WmcQzUIlCHA6JxywJ89EnGEvomgnPNWiPKhOwcdkVUjX0FH2s\nXIU4qCQqdpoR5dCCk5IYhegJBGRzL38ggTF00JcSr6gwrOwIpaz9+9u3msRoU60g\nRejAXDdwXTVZKRk7w5hCE4AIiOnE4hPme/XprT6jkgcomTHf10Xsl+e28sFPdQdd\n7Y9r6n4f556r9dXOvJjcTNIdbHQH7z0gQbxiXyxMgQKBgQDy2voGpVVectkuWEop\nO0MDoHivGg9ncAFytpDrEDNHK3O4ubPHhFIirVPOnf+1MYGNOL8Jp20egUaaPbBv\nFUJpjiK3KhWPltb02mEH8BFP2SB8H99AOWR8sJ53i8F402L23PrxRia0Gm5BRPIm\npQ+UjIqi35e/SKHWNVkq2r89awKBgQC3AriBVBAJuJL58tSTl+YvymBw36sFCoEG\nAyWP3AVcoF9w+DI/yln+/rf4vA2VpsOnHGAzbauLG81boVXq/KSFAfw/t9iFQz/h\nJW/6UfZh2LXoHu8SE4jt9PLrf707jaMJCBgteMXMDdhtq7EfwVqKIaBxv7lv+NQg\nRCHX8+C1oQKBgEOxvlfz5iP5p4g/nAx6NGfiZ0GH5htTIVQ0h5i+X0zLU+p9+Rr4\nS1zXK7FAYXLEZfRTiQzL2qLSLjf4UiHkryp1MEAWPwRTa3+9D6cCyBCV2XQ//h8M\n4HHRWZrBHiDr634cguaWQ1uYsnsHGOikwf8KXeqgoM/1Ewd+v2guqXgZAoGACAf6\niNJjkcmjyYw6f++ejmJXMRzfqGz5lIX21AVXxuTSy2ZY7iu3H1WWRTgbcIHM/Dxm\njFs3t/cUX/0IhDNqFNwtca5jthVpbDv0WgvWwBx+fx08aJKq46ZoMqV8bGyexvqv\n9O7j3zyMTuPF9hrKGl23aMZ9IMjOpkvXIF73cYECgYAW+yx/pBtz5p40EtTOl7AK\nNI8oF9IDMy+Wt0Yv/AzKyqFKvjX03dpU0vU/xNpStseW/btaCmoO9s6b+77Mckqk\nVeLI81krPkD4ff2KNSzFM/o58jCMjtS14TDZGpYc3+3gE+sS1BjvXgTTikrgmTsy\npk85IKHWX4xAUc2PkWozZQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "vcp-for-streamlit@web-application-358408.iam.gserviceaccount.com",
+  "client_id": "109364290400051661215",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/vcp-for-streamlit%40web-application-358408.iam.gserviceaccount.com"
+}
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials, scope)
+    client = gspread.authorize(creds)
+    return client
+
+#Now will can access our google sheets we call client.open on StartupName
+sheet = get_credentials().open('VCP_info').sheet1
+results = sheet.get_all_records()
+df = pd.json_normalize(results)
 
 st.set_page_config(
     page_title="VCP Profile Chart",
     layout="wide")
 
-uploaded_file = st.sidebar.file_uploader("Download the latest csv file from https://carlam.net and upload it to here")
-
-if uploaded_file is None:
-    # initialize list of lists
-    data = [2022,1,1,2240,4058,432,1117,-22652219216,3.414,32.137,24.802,20.896,14.147,24.802,117,1.858,'[[TSLA, 0.81237], [AAPL, 0.81237]]']
-
-    # Create the pandas DataFrame
-    df = pd.DataFrame([data], columns=["Year",
-                                     'Month',
-                                     'Day',
-                                     'Advanced stock(day)',
-                                     'Declined stock(day)',
-                                     'New High',
-                                     'New Low',
-                                     'Gauge',
-                                     'Stock above its 50-DMA > 150-DMA > 200-DMA',
-                                     'Stock above its 50-DMA',
-                                     'Stock that its 20-DMA > 50-DMA',
-                                     'Stock that its 50-DMA > 200-DMA',
-                                     'Stock that its 50 > 150 > 200-DMA',
-                                     'Stock that its 200-DMA is rising',
-                                     'Number of Stock that fit condition',
-                                     'Numbertion',
-                                     'Tickers that fit the conditions',
-                                     ])
-else:
-    df = pd.read_csv(uploaded_file)
-
 df.rename(columns = {'Year':'year', 'Month':'month', 'Day':'day'}, inplace = True)
 df['date']= pd.to_datetime(df[['year', 'month', 'day']])
 date_list = df['date'].tolist()
 date_list.sort(reverse=True)
-
 
 df.set_index('date', inplace = True)
 df.drop(['year', 'month', 'day'], axis = 1, inplace = True)
@@ -93,6 +87,17 @@ def replace_brackets(string):
 df['Tickers'] = df['Tickers that fit the conditions'].apply(replace_brackets).apply(split_string)
 
 
+# Initialization
+if 'key' not in st.session_state:
+    st.session_state['key'] = ''
+
+# Session State also supports attribute based syntax
+if 'key' not in st.session_state:
+    st.session_state.key = ''
+
+# Read
+st.write(st.session_state.key)
+
 symbols = df.loc[date]['Tickers']
 symbols = [i.replace("'", "") for i in symbols]
 
@@ -107,6 +112,16 @@ risk_input = st.sidebar.text_input('Enter your risk($)', '100')
 buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
+
+st.sidebar.write(f'''
+    <a target="_self" href="https://carlam.net">
+        <button>
+            Find the latest info in csv here
+        </button>
+    </a>
+    ''',
+    unsafe_allow_html=True
+)
 
 result = st.subheader(ticker + "------- Amt: " + str(math.floor(eval(risk_input)/(eval(buy_at) - eval(stop_loss)))) +", buy at: "+buy_at+ ",    stop Loss at: " + stop_loss +  ",  Risk(%):  " + str(round((eval(buy_at) - eval(stop_loss))/eval(buy_at)*100,2))+"%" )
 earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker)))
