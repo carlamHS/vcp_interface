@@ -17,6 +17,10 @@ import yfinance as yf
 from datetime import date, time,timedelta, datetime
 import gspread
 import json
+import streamlit as st
+import streamlit.components.v1 as components
+
+
 
 
 
@@ -120,6 +124,24 @@ st.sidebar.write(f'''
         </button>
     </a>
     ''',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2153021198707711"
+     crossorigin="anonymous"></script>
+<!-- stream lit -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-2153021198707711"
+     data-ad-slot="8965125538"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    """,
     unsafe_allow_html=True
 )
 
