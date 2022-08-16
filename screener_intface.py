@@ -21,6 +21,9 @@ import streamlit as st
 import streamlit.components.v1 as components
 from streamlit.components.v1 import html
 
+
+
+
 yf.pdr_override()
 
 def get_credentials():
@@ -264,7 +267,7 @@ config={
 st.plotly_chart(fig, use_container_width=True, config=config)
 
 # Define your javascript
-my_js = """
+my_js = '''
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2153021198707711"
      crossorigin="anonymous"></script>
 <!-- stream lit -->
@@ -277,11 +280,8 @@ my_js = """
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>;
-"""
+'''
 
-# Wrapt the javascript as html code
-my_html = f"{my_js}"
 
-# Execute your app
-html(my_html)
+components.html(my_js)  # JavaScript works
 
