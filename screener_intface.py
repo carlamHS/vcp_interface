@@ -111,16 +111,6 @@ buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 
-st.sidebar.write(f'''
-    <a target="_self" href="https://carlam.net">
-        <button>
-            Find the latest info in csv here
-        </button>
-    </a>
-    ''',
-    unsafe_allow_html=True
-)
-
 result = st.subheader(ticker + "------- Amt: " + str(math.floor(eval(risk_input)/(eval(buy_at) - eval(stop_loss)))) +", buy at: "+buy_at+ ",    stop Loss at: " + stop_loss +  ",  Risk(%):  " + str(round((eval(buy_at) - eval(stop_loss))/eval(buy_at)*100,2))+"%" )
 earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker)))
 
