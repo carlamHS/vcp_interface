@@ -18,6 +18,7 @@ from datetime import date, time,timedelta, datetime
 import gspread
 import json
 
+
 yf.pdr_override()
 
 def get_credentials():
@@ -73,6 +74,13 @@ def get_next_earnings_date(stock_symbol):
 
     return next_earnings_date
 
+# Obtaining the sector of a ticker by yfinance
+def get_sector(ticker):
+    """
+    Returns the sector of a ticker
+    """
+    return yf.Ticker(ticker).info['sector']
+
 # Split the string into a list of strings
 def split_string(string):
     lst = string.split(', ')
@@ -84,6 +92,13 @@ def replace_brackets(string):
 
 df['Tickers'] = df['Tickers that fit the conditions'].apply(replace_brackets).apply(split_string)
 
+# Obtaining the sector of a ticker by yahooquery
+def get_sector(stock):
+    """
+    Returns the sector of a ticker
+    """
+    import yahooquery as yq
+    return yq.Ticker(stock).asset_profile[stock]['sector']
 
 # Initialization
 if 'key' not in st.session_state:
@@ -112,7 +127,8 @@ buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 
 result = st.subheader(ticker + "------- Amt: " + str(math.floor(eval(risk_input)/(eval(buy_at) - eval(stop_loss)))) +", buy at: "+buy_at+ ",    stop Loss at: " + stop_loss +  ",  Risk(%):  " + str(round((eval(buy_at) - eval(stop_loss))/eval(buy_at)*100,2))+"%" )
-earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker)))
+earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker))+"      Sector: "+get_sector(ticker))
+
 
 # download dataframe
 start = date - timedelta(days = p)
