@@ -128,17 +128,15 @@ buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 
-sideb = st.sidebar
-check1 = sideb.button("Step-by-step build this Python")
 
-from bokeh.models import Div
+import webbrowser
+url = 'https://carlam.net/index.html'
+    
+with st.sidebar:
+    if st.button('Step-by-step build this Python'):
+        webbrowser.open_new(url)
 
-if check1:
-    js = "window.open(https://carlam.net/index.html)"  # New tab or window
-    js = "window.location.href = 'https://carlam.net/index.html'"  # Current tab
-    html = '<img src onerror="{}">'.format(js)
-    div = Div(text=html)
-    st.bokeh_chart(div)
+
 
 result = st.subheader(ticker + "------- Amt: " + str(math.floor(eval(risk_input)/(eval(buy_at) - eval(stop_loss)))) +", buy at: "+buy_at+ ",    stop Loss at: " + stop_loss +  ",  Risk(%):  " + str(round((eval(buy_at) - eval(stop_loss))/eval(buy_at)*100,2))+"%" )
 earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker))+"--||--Sector: "+get_sector(ticker))
