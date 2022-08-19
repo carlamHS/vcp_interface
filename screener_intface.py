@@ -131,7 +131,7 @@ stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 sideb = st.sidebar
 check1 = sideb.button("Step-by-step build this Python")
 
-from bokeh.models.widgets import Div
+from bokeh.models import Div
 
 if check1:
     js = "window.open(https://carlam.net/index.html)"  # New tab or window
