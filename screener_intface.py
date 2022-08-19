@@ -131,7 +131,7 @@ stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 st.sidebar.write(f'''
     <a target="_self" href="https://carlam.net/index.html">
         <button>
-            Find the latest info in csv here
+            Guide of building this python project
         </button>
     </a>
     ''',
