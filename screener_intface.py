@@ -128,9 +128,7 @@ buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 
-import bokeh 
 from bokeh.models.widgets import Div
-import streamlit as st
 
 if st.button('Go to Streamlit'):
     js = "window.open('https://www.streamlit.io/')"  # New tab or window
@@ -138,8 +136,6 @@ if st.button('Go to Streamlit'):
     html = '<img src onerror="{}">'.format(js)
     div = Div(text=html)
     st.bokeh_chart(div)
-
-
 
 result = st.subheader(ticker + "------- Amt: " + str(math.floor(eval(risk_input)/(eval(buy_at) - eval(stop_loss)))) +", buy at: "+buy_at+ ",    stop Loss at: " + stop_loss +  ",  Risk(%):  " + str(round((eval(buy_at) - eval(stop_loss))/eval(buy_at)*100,2))+"%" )
 earning_date = st.caption("Next earning date: "+str(get_next_earnings_date(ticker))+"--||--Sector: "+get_sector(ticker))
