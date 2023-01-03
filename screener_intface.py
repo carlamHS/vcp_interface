@@ -70,9 +70,11 @@ def get_next_earnings_date(stock_symbol):
     import yahoo_fin.stock_info as si
 
     # Get the next earnings date for the stock
-    next_earnings_date = si.get_next_earnings_date(stock_symbol)
-
-    return next_earnings_date
+    try:
+        next_earnings_date = si.get_next_earnings_date(stock_symbol)
+        return next_earnings_date
+    except:
+        return "N/A"
 
 # Obtaining the sector of a ticker by yfinance
 def get_sector(ticker):
