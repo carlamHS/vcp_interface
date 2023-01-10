@@ -140,6 +140,7 @@ st.sidebar.write(f'''
     unsafe_allow_html=True)
 
 st.sidebar.write(f'''
+    <br>
     <a target="_self" href="https://twitter.com/CarlamHS">
         <button>
             Twitter for Daily Result
