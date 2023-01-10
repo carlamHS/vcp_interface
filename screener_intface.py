@@ -131,7 +131,7 @@ buy_at = st.sidebar.text_input('Enter your buy at price', '100')
 stop_loss = st.sidebar.text_input('Enter your stop loss','99')
 
 st.sidebar.write(f'''
-    <a target="_self" href="https://carlam.net/index.html">
+    <a target="_self" href="https://carlam.net/">
         <button>
             Guide of this python project
         </button>
