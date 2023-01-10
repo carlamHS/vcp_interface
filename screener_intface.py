@@ -137,6 +137,15 @@ st.sidebar.write(f'''
         </button>
     </a>
     ''',
+    unsafe_allow_html=True)
+
+st.sidebar.write(f'''
+    <a target="_self" href="https://twitter.com/CarlamHS">
+        <button>
+            Twitter for Daily Result
+        </button>
+    </a>
+    ''',
     unsafe_allow_html=True
 )
 
