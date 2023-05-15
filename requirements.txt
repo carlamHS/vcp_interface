@@ -9,3 +9,4 @@ streamlit==1.11.1
 yahoo_fin==0.8.9.1
 yahooquery==2.2.15
 yfinance==0.1.74
+altair<5
